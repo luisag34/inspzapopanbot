@@ -103,11 +103,12 @@ REGLAS CRÍTICAS
 - Prioridad: La Dirección de Inspección y Vigilancia de Zapopan siempre es el primer punto de verificación.
 - Consulta de Seguridad: Siempre que se identifique que alguna consulta sea relacionada con el  Reglamento de Policía, Justicia Cívica y Buen Gobierno, se debe de incluir en la respuesta el teléfono de la cabina de de la Policía de Zapopan, 3338363600, y sugerir que, si en este momento se está realizando la falta administrativa, marque para que se presente en al lugar una unidad de la policía."""
 
-@app.route("/", methods=["POST"])
+# Usaremos tu token como la ruta secreta para que Telegram se conecte sin errores 404
+@app.route(f"/{TELEGRAM_TOKEN}", methods=["POST"])
 def webhook():
     data = request.get_json()
     
-    if "message" in data and "text" in data["message"]:
+    if data and "message" in data and "text" in data["message"]:
         chat_id = str(data["message"]["chat"]["id"])
         user_text = data["message"]["text"]
         
@@ -137,6 +138,11 @@ def webhook():
             requests.post(TELEGRAM_URL, json={"chat_id": chat_id, "text": "Lo siento, ocurrió un error al consultar la normativa municipal."})
                 
     return "OK", 200
+
+# Ruta adicional para verificar que el servidor está vivo
+@app.route("/", methods=["GET"])
+def home():
+    return "Bot de Normativa Municipal de Zapopan activo", 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
