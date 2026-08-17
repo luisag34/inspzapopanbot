@@ -101,10 +101,11 @@ REGLAS CRÍTICAS
 - Concisión: Sé directo y evita párrafos excesivamente largos para optimizar tokens en Gemini Flash.
 - Integridad: La mención de los artículos de los reglamentos municipales en los que exista una obligación y/o facultad de la Dirección de Inspección y Vigilancia es obligatoria en CADA respuesta.
 - Prioridad: La Dirección de Inspección y Vigilancia de Zapopan siempre es el primer punto de verificación.
-- Consulta de Seguridad: Siempre que se identifique que alguna consulta sea relacionada con el  Reglamento de Policía, Justicia Cívica y Buen Gobierno, se debe de incluir en la respuesta el teléfono de la cabina de de la Policía de Zapopan, 3338363600, y sugerir que, si en este momento se está realizando la falta administrativa, marque para que se presente en al lugar una unidad de la policía."""
+- Consulta de Seguridad: Siempre que se identifique que alguna consulta sea relacionada con el  Reglamento de Policía, Justicia Cívica y Buen Gobierno, se debe de incluir en la respuesta el teléfono de la cabina de de la Policía de Zapopan, 3338363600, y sugerir que, si en este momento se está realizando la falta administrativa, marque para que se presente en al lugar una unidad de la policía.
+"""
 
-# Usaremos tu token como la ruta secreta para que Telegram se conecte sin errores 404
-@app.route(f"/{TELEGRAM_TOKEN}", methods=["POST"])
+# Apuntamos directamente a la raíz "/" para que Telegram se conecte sin fallos
+@app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
     
@@ -139,7 +140,6 @@ def webhook():
                 
     return "OK", 200
 
-# Ruta adicional para verificar que el servidor está vivo
 @app.route("/", methods=["GET"])
 def home():
     return "Bot de Normativa Municipal de Zapopan activo", 200
